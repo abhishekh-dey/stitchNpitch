@@ -78,18 +78,18 @@ const FailAnimation: React.FC<FailAnimationProps> = ({ isActive, guideName, onCl
       </style>
       
       <div 
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70 backdrop-blur-sm"
         onClick={handleClose}
       >
         <div 
-          className="bg-gradient-to-br from-red-500 via-pink-500 to-purple-600 rounded-3xl p-8 max-w-2xl w-full shadow-2xl text-center fail-bounce relative"
+          className="bg-gradient-to-br from-red-500 via-pink-500 to-purple-600 bg-opacity-90 backdrop-blur-xl border border-white border-opacity-20 rounded-3xl p-8 max-w-2xl w-full shadow-2xl text-center fail-bounce relative"
           onClick={handleModalClick}
         >
           
           {/* Close Button */}
           <button
             onClick={handleClose}
-            className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors bg-white bg-opacity-20 rounded-full p-2 hover:bg-opacity-30 z-10"
+            className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors bg-white bg-opacity-20 rounded-full p-2 hover:bg-opacity-30 z-10 backdrop-blur-sm"
             type="button"
           >
             <X className="w-6 h-6" />
@@ -107,7 +107,7 @@ const FailAnimation: React.FC<FailAnimationProps> = ({ isActive, guideName, onCl
             OOPS! 
           </h1>
           
-          <div className="bg-white bg-opacity-20 rounded-2xl p-6 mb-6 backdrop-blur-sm">
+          <div className="bg-white bg-opacity-20 rounded-2xl p-6 mb-6 backdrop-blur-sm border border-white border-opacity-30">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
               {guideName}
             </h2>
@@ -131,7 +131,7 @@ const FailAnimation: React.FC<FailAnimationProps> = ({ isActive, guideName, onCl
           {/* Close Button */}
           <button
             onClick={handleClose}
-            className="bg-white bg-opacity-20 text-white px-8 py-3 rounded-xl hover:bg-opacity-30 transition-all transform hover:scale-105 font-semibold backdrop-blur-sm z-10 relative"
+            className="bg-white bg-opacity-20 text-white px-8 py-3 rounded-xl hover:bg-opacity-30 transition-all transform hover:scale-105 font-semibold backdrop-blur-sm z-10 relative border border-white border-opacity-30"
             type="button"
           >
             Try Again

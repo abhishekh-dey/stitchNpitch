@@ -45,34 +45,36 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl transform transition-all">
+    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white bg-opacity-10 backdrop-blur-xl border border-white border-opacity-20 rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-2">
-            <Lock className="w-6 h-6 text-blue-900" />
-            <h2 className="text-2xl font-bold text-gray-800">Admin Access</h2>
+            <div className="p-2 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
+              <Lock className="w-6 h-6 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-white">Admin Access</h2>
           </div>
           <button
             onClick={handleClose}
-            className="text-gray-500 hover:text-gray-700 transition-colors"
+            className="text-white hover:text-gray-200 transition-colors bg-white bg-opacity-10 rounded-full p-2 hover:bg-opacity-20 backdrop-blur-sm"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
         <div className="mb-6">
-          <p className="text-gray-600 mb-4">
-            Mark <span className="font-semibold text-blue-900">{guideName}</span> as:
+          <p className="text-white text-opacity-90 mb-4">
+            Mark <span className="font-semibold text-blue-200">{guideName}</span> as:
           </p>
           
           <div className="flex gap-4 mb-6">
             <button
               type="button"
               onClick={() => setSelectedAction('pass')}
-              className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all ${
+              className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all backdrop-blur-sm border ${
                 selectedAction === 'pass'
-                  ? 'bg-green-500 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-700 hover:bg-green-100'
+                  ? 'bg-green-500 bg-opacity-80 text-white shadow-lg border-green-400 border-opacity-50'
+                  : 'bg-white bg-opacity-10 text-white hover:bg-green-500 hover:bg-opacity-30 border-white border-opacity-20'
               }`}
             >
               ✅ Selected (Winner)
@@ -80,10 +82,10 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
             <button
               type="button"
               onClick={() => setSelectedAction('fail')}
-              className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all ${
+              className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all backdrop-blur-sm border ${
                 selectedAction === 'fail'
-                  ? 'bg-red-500 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-700 hover:bg-red-100'
+                  ? 'bg-red-500 bg-opacity-80 text-white shadow-lg border-red-400 border-opacity-50'
+                  : 'bg-white bg-opacity-10 text-white hover:bg-red-500 hover:bg-opacity-30 border-white border-opacity-20'
               }`}
             >
               ❌ Not Selected
@@ -93,7 +95,7 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
 
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-white text-opacity-90 mb-2">
               Admin Password
             </label>
             <input
@@ -101,13 +103,13 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent text-white placeholder-white placeholder-opacity-60 backdrop-blur-sm"
               placeholder="Enter admin password"
             />
           </div>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            <div className="mb-4 p-3 bg-red-500 bg-opacity-20 border border-red-400 border-opacity-50 text-red-200 rounded-lg backdrop-blur-sm">
               {error}
             </div>
           )}
@@ -116,13 +118,13 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
             <button
               type="button"
               onClick={handleClose}
-              className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors"
+              className="flex-1 py-3 px-4 bg-white bg-opacity-10 border border-white border-opacity-20 text-white rounded-xl hover:bg-opacity-20 transition-colors backdrop-blur-sm"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 py-3 px-4 bg-blue-900 text-white rounded-xl hover:bg-blue-800 transition-colors"
+              className="flex-1 py-3 px-4 bg-blue-600 bg-opacity-80 text-white rounded-xl hover:bg-opacity-90 transition-colors backdrop-blur-sm border border-blue-500 border-opacity-50"
             >
               Confirm
             </button>

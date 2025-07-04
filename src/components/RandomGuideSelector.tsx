@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shuffle, User, Building, UserCheck, Trophy } from 'lucide-react';
+import { Shuffle, User, Building, UserCheck, Trophy, Sparkles } from 'lucide-react';
 import { Guide, getGuidesByDepartment, Winner } from '../config/data';
 import DepartmentSelector from './DepartmentSelector';
 
@@ -85,8 +85,10 @@ const RandomGuideSelector: React.FC<RandomGuideSelectorProps> = ({
               />
             </div>
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 animate-bounce">
-            🎯 Stitch n Pitch
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 animate-bounce flex items-center justify-center gap-4">
+            <Sparkles className="w-16 h-16 text-yellow-400 animate-pulse" />
+            Stitch n Pitch
+            <Sparkles className="w-16 h-16 text-yellow-400 animate-pulse" />
           </h1>
           <p className="text-xl md:text-2xl text-blue-200 font-medium">
             Choose your department and pick a random guide for audit
