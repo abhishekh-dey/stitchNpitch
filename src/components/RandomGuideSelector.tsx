@@ -81,7 +81,7 @@ const RandomGuideSelector: React.FC<RandomGuideSelectorProps> = ({
               <img 
                 src="/stitch-n-pitch-logo.png" 
                 alt="Stitch n Pitch Logo" 
-                className="h-24 w-24 rounded-full object-cover drop-shadow-2xl border-4 border-white border-opacity-50"
+                className="h-24 w-24 rounded-2xl object-cover drop-shadow-2xl border-4 border-white border-opacity-50"
               />
             </div>
           </div>

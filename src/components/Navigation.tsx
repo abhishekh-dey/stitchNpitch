@@ -41,9 +41,17 @@ const PurgeModal: React.FC<PurgeModalProps> = ({ isOpen, onClose, onConfirm }) =
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
-        <div className="flex items-center gap-3 mb-6">
-          <AlertTriangle className="w-8 h-8 text-red-600" />
-          <h2 className="text-2xl font-bold text-gray-800">Confirm Purge</h2>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-8 h-8 text-red-600" />
+            <h2 className="text-2xl font-bold text-gray-800">Confirm Purge</h2>
+          </div>
+          <button
+            onClick={handleClose}
+            className="text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
         </div>
 
         <div className="mb-6">
@@ -127,7 +135,7 @@ const Navigation: React.FC<NavigationProps> = ({
                 <img 
                   src="/stitch-n-pitch-logo.png" 
                   alt="Stitch n Pitch Logo" 
-                  className="h-12 w-12 rounded-full object-cover drop-shadow-lg border-2 border-white border-opacity-30"
+                  className="h-12 w-12 rounded-xl object-cover drop-shadow-lg border-2 border-white border-opacity-30"
                 />
               </div>
               <div className="hidden sm:block">
