@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Trophy, Calendar, User, Building, UserCheck, Trash2, AlertTriangle, X } from 'lucide-react';
-import { Winner, PURGE_PASSWORD, ADMIN_PASSWORD } from '../config/data';
+import { Trophy, Calendar, User, Building, UserCheck, Trash2, AlertTriangle, X, Filter, Users, Star } from 'lucide-react';
+import { Winner, PURGE_PASSWORD, ADMIN_PASSWORD, DEPARTMENTS } from '../config/data';
 
 interface WinnerHistoryProps {
   winners: Winner[];
@@ -189,6 +189,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, onConfirm, w
 
 const WinnerHistory: React.FC<WinnerHistoryProps> = ({ winners, onPurgeWinners, onDeleteWinner }) => {
   const [isPurgeModalOpen, setIsPurgeModalOpen] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState<string>('All');
   const [deleteModalState, setDeleteModalState] = useState<{
     isOpen: boolean;
     winnerId: string | null;
@@ -231,6 +232,34 @@ const WinnerHistory: React.FC<WinnerHistoryProps> = ({ winners, onPurgeWinners, 
     });
   };
 
+  // Filter winners based on selected department
+  const filteredWinners = selectedDepartment === 'All' 
+    ? winners 
+    : winners.filter(winner => winner.department === selectedDepartment);
+
+  // Get department counts for display
+  const departmentCounts = DEPARTMENTS.reduce((acc, dept) => {
+    acc[dept] = winners.filter(winner => winner.department === dept).length;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Department button colors
+  const getDepartmentColor = (department: string, index: number) => {
+    const colors = [
+      'from-blue-400 to-blue-600',
+      'from-green-400 to-green-600',
+      'from-purple-400 to-purple-600',
+      'from-pink-400 to-pink-600',
+      'from-orange-400 to-orange-600',
+      'from-cyan-400 to-cyan-600',
+      'from-red-400 to-red-600',
+      'from-indigo-400 to-indigo-600',
+      'from-yellow-400 to-yellow-600',
+      'from-teal-400 to-teal-600'
+    ];
+    return colors[index % colors.length];
+  };
+
   return (
     <div className="pt-20 pb-8 px-4">
       <div className="max-w-6xl mx-auto">
@@ -247,6 +276,99 @@ const WinnerHistory: React.FC<WinnerHistoryProps> = ({ winners, onPurgeWinners, 
           </p>
         </div>
 
+        {/* Department Filter Buttons */}
+        <div className="mb-8">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-white mb-2 flex items-center justify-center gap-2">
+              <Filter className="w-6 h-6" />
+              Filter by Department
+            </h2>
+            <p className="text-blue-200">Click on a department to filter winners</p>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3 mb-4">
+            {/* All Button */}
+            <button
+              onClick={() => setSelectedDepartment('All')}
+              className={`group relative overflow-hidden rounded-2xl px-6 py-3 transition-all duration-300 transform hover:scale-105 ${
+                selectedDepartment === 'All'
+                  ? 'bg-gradient-to-r from-yellow-400 to-orange-500 shadow-2xl scale-105'
+                  : 'bg-white bg-opacity-10 backdrop-blur-sm hover:bg-opacity-20'
+              }`}
+            >
+              <div className="relative z-10 flex items-center gap-2">
+                <Star className={`w-5 h-5 ${selectedDepartment === 'All' ? 'text-white' : 'text-yellow-300'}`} />
+                <span className={`font-semibold ${selectedDepartment === 'All' ? 'text-white' : 'text-white'}`}>
+                  All Departments
+                </span>
+                <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                  selectedDepartment === 'All' 
+                    ? 'bg-white bg-opacity-20 text-white' 
+                    : 'bg-yellow-500 bg-opacity-30 text-yellow-200'
+                }`}>
+                  {winners.length}
+                </span>
+              </div>
+              
+              {/* Animated background effect */}
+              <div className={`absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 ${
+                selectedDepartment === 'All' ? 'opacity-30' : ''
+              }`} />
+            </button>
+
+            {/* Department Buttons */}
+            {DEPARTMENTS.map((department, index) => {
+              const count = departmentCounts[department] || 0;
+              const isSelected = selectedDepartment === department;
+              const colorClass = getDepartmentColor(department, index);
+              
+              return (
+                <button
+                  key={department}
+                  onClick={() => setSelectedDepartment(department)}
+                  className={`group relative overflow-hidden rounded-2xl px-6 py-3 transition-all duration-300 transform hover:scale-105 ${
+                    isSelected
+                      ? `bg-gradient-to-r ${colorClass} shadow-2xl scale-105`
+                      : 'bg-white bg-opacity-10 backdrop-blur-sm hover:bg-opacity-20'
+                  }`}
+                >
+                  <div className="relative z-10 flex items-center gap-2">
+                    <Building className={`w-5 h-5 ${isSelected ? 'text-white' : 'text-blue-300'}`} />
+                    <span className={`font-semibold ${isSelected ? 'text-white' : 'text-white'}`}>
+                      {department}
+                    </span>
+                    {count > 0 && (
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                        isSelected 
+                          ? 'bg-white bg-opacity-20 text-white' 
+                          : 'bg-blue-500 bg-opacity-30 text-blue-200'
+                      }`}>
+                        {count}
+                      </span>
+                    )}
+                  </div>
+                  
+                  {/* Animated background effect */}
+                  <div className={`absolute inset-0 bg-gradient-to-r ${colorClass} opacity-0 group-hover:opacity-20 transition-opacity duration-300 ${
+                    isSelected ? 'opacity-30' : ''
+                  }`} />
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Filter Status */}
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 bg-white bg-opacity-20 text-white px-4 py-2 rounded-full backdrop-blur-sm">
+              <Users className="w-4 h-4" />
+              <span className="font-medium">
+                Showing {filteredWinners.length} {filteredWinners.length === 1 ? 'winner' : 'winners'}
+                {selectedDepartment !== 'All' && ` from ${selectedDepartment}`}
+              </span>
+            </div>
+          </div>
+        </div>
+
         {/* Purge Button */}
         {winners.length > 0 && (
           <div className="text-center mb-8">
@@ -261,15 +383,22 @@ const WinnerHistory: React.FC<WinnerHistoryProps> = ({ winners, onPurgeWinners, 
         )}
 
         {/* Winners List */}
-        {winners.length === 0 ? (
+        {filteredWinners.length === 0 ? (
           <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-2xl p-12 text-center border border-white border-opacity-20">
             <Trophy className="w-16 h-16 text-white opacity-50 mx-auto mb-4" />
-            <h2 className="text-2xl font-semibold text-white mb-2">No Winners Yet</h2>
-            <p className="text-blue-200">Start selecting guides to see winners here!</p>
+            <h2 className="text-2xl font-semibold text-white mb-2">
+              {selectedDepartment === 'All' ? 'No Winners Yet' : `No Winners from ${selectedDepartment}`}
+            </h2>
+            <p className="text-blue-200">
+              {selectedDepartment === 'All' 
+                ? 'Start selecting guides to see winners here!' 
+                : `No guides from ${selectedDepartment} have been selected as winners yet.`
+              }
+            </p>
           </div>
         ) : (
           <div className="grid gap-6">
-            {winners.map((winner, index) => (
+            {filteredWinners.map((winner, index) => (
               <div
                 key={`${winner.id || winner.guide_id}-${winner.timestamp}`}
                 className="bg-white bg-opacity-10 backdrop-blur-md rounded-2xl p-6 shadow-xl transform transition-all hover:scale-105 border border-white border-opacity-20"
@@ -277,7 +406,12 @@ const WinnerHistory: React.FC<WinnerHistoryProps> = ({ winners, onPurgeWinners, 
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-yellow-500 bg-opacity-30 rounded-full flex items-center justify-center backdrop-blur-sm">
-                      <span className="text-yellow-200 font-bold text-lg">#{index + 1}</span>
+                      <span className="text-yellow-200 font-bold text-lg">
+                        #{selectedDepartment === 'All' 
+                          ? winners.findIndex(w => w.id === winner.id || w.guide_id === winner.guide_id) + 1
+                          : index + 1
+                        }
+                      </span>
                     </div>
                     <div>
                       <h3 className="text-2xl font-bold text-white">{winner.name}</h3>
