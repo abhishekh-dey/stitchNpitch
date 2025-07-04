@@ -18,10 +18,10 @@ export interface Winner extends Guide {
 // ==========================================
 
 // Password for marking guides as Pass/Fail
-export const ADMIN_PASSWORD = "hgjikmnerDmAn@27Lz9";
+export const ADMIN_PASSWORD = "InternationalMessaging@20";
 
 // Password for purging winners (can be same or different)
-export const PURGE_PASSWORD = "hgjikmnerDmAn@27Lz9";
+export const PURGE_PASSWORD = "InternationalMessaging@20";
 
 // List of all guides participating in the contest
 // Add as many departments and guides as needed
