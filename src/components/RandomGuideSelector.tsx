@@ -77,17 +77,19 @@ const RandomGuideSelector: React.FC<RandomGuideSelectorProps> = ({
         {/* Header with Logo */}
         <div className="text-center mb-12">
           <div className="flex justify-center mb-6">
-            <img 
-              src="/stitch-n-pitch-logo.png" 
-              alt="Stitch n Pitch Logo" 
-              className="h-24 w-auto drop-shadow-2xl"
-            />
+            <div className="relative">
+              <img 
+                src="/stitch-n-pitch-logo.png" 
+                alt="Stitch n Pitch Logo" 
+                className="h-24 w-24 rounded-full object-cover drop-shadow-2xl border-4 border-white border-opacity-50"
+              />
+            </div>
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 animate-bounce">
             🎯 Stitch n Pitch
           </h1>
           <p className="text-xl md:text-2xl text-blue-200 font-medium">
-            Choose your department and select a random guide
+            Choose your department and pick a random guide for audit
           </p>
         </div>
 
@@ -131,7 +133,7 @@ const RandomGuideSelector: React.FC<RandomGuideSelectorProps> = ({
               } text-white`}
             >
               <Shuffle className={`w-8 h-8 ${isSpinning ? 'animate-spin' : ''}`} />
-              {isSpinning ? 'Selecting...' : availableGuides.length === 0 ? 'No Guides Available' : `Select Random Guide from ${selectedDepartment}`}
+              {isSpinning ? 'Selecting...' : availableGuides.length === 0 ? 'No Guides Available' : `Pick Random Guide from ${selectedDepartment}`}
             </button>
             
             {isSpinning && (
@@ -224,7 +226,7 @@ const RandomGuideSelector: React.FC<RandomGuideSelectorProps> = ({
               <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mb-2">
                 <span className="text-white font-bold">2</span>
               </div>
-              <p>Click "Select Random Guide"</p>
+              <p>Click "Pick Random Guide"</p>
             </div>
             <div className="flex flex-col items-center">
               <div className="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center mb-2">

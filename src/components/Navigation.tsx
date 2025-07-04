@@ -41,17 +41,9 @@ const PurgeModal: React.FC<PurgeModalProps> = ({ isOpen, onClose, onConfirm }) =
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <AlertTriangle className="w-8 h-8 text-red-600" />
-            <h2 className="text-2xl font-bold text-gray-800">Confirm Purge</h2>
-          </div>
-          <button
-            onClick={handleClose}
-            className="text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            <X className="w-6 h-6" />
-          </button>
+        <div className="flex items-center gap-3 mb-6">
+          <AlertTriangle className="w-8 h-8 text-red-600" />
+          <h2 className="text-2xl font-bold text-gray-800">Confirm Purge</h2>
         </div>
 
         <div className="mb-6">
@@ -117,22 +109,31 @@ const Navigation: React.FC<NavigationProps> = ({
     setIsPurgeModalOpen(false);
   };
 
+  const handleLogoClick = () => {
+    onTabChange('selection');
+  };
+
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-40 bg-black bg-opacity-20 backdrop-blur-md border-b border-white border-opacity-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center gap-3">
-              <img 
-                src="/stitch-n-pitch-logo.png" 
-                alt="Stitch n Pitch Logo" 
-                className="h-12 w-auto drop-shadow-lg"
-              />
+            {/* Logo - Clickable */}
+            <button 
+              onClick={handleLogoClick}
+              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            >
+              <div className="relative">
+                <img 
+                  src="/stitch-n-pitch-logo.png" 
+                  alt="Stitch n Pitch Logo" 
+                  className="h-12 w-12 rounded-full object-cover drop-shadow-lg border-2 border-white border-opacity-30"
+                />
+              </div>
               <div className="hidden sm:block">
                 <h1 className="text-xl font-bold text-white">Stitch n Pitch Portal</h1>
               </div>
-            </div>
+            </button>
 
             {/* Navigation Tabs */}
             <div className="flex items-center gap-2">
