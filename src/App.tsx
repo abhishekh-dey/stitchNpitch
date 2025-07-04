@@ -33,14 +33,17 @@ function App() {
       const { data, error } = await supabase
         .from('winners')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: true }); // Changed to ascending order
 
       if (error) {
         console.error('Error loading winners:', error);
         // Fallback to localStorage if Supabase fails
         const savedWinners = localStorage.getItem('stitchAndPitchWinners');
         if (savedWinners) {
-          setWinners(JSON.parse(savedWinners));
+          const localWinners = JSON.parse(savedWinners);
+          // Sort local winners by timestamp in ascending order
+          localWinners.sort((a: Winner, b: Winner) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+          setWinners(localWinners);
         }
       } else {
         setWinners(data || []);
@@ -52,7 +55,10 @@ function App() {
       // Fallback to localStorage
       const savedWinners = localStorage.getItem('stitchAndPitchWinners');
       if (savedWinners) {
-        setWinners(JSON.parse(savedWinners));
+        const localWinners = JSON.parse(savedWinners);
+        // Sort local winners by timestamp in ascending order
+        localWinners.sort((a: Winner, b: Winner) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+        setWinners(localWinners);
       }
     } finally {
       setLoading(false);
@@ -76,7 +82,7 @@ function App() {
       if (error) {
         console.error('Error saving winner to database:', error);
         // Fallback to localStorage
-        const updatedWinners = [...winners, winner];
+        const updatedWinners = [...winners, winner].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
         setWinners(updatedWinners);
         localStorage.setItem('stitchAndPitchWinners', JSON.stringify(updatedWinners));
       } else {
@@ -86,7 +92,7 @@ function App() {
     } catch (error) {
       console.error('Error connecting to database:', error);
       // Fallback to localStorage
-      const updatedWinners = [...winners, winner];
+      const updatedWinners = [...winners, winner].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
       setWinners(updatedWinners);
       localStorage.setItem('stitchAndPitchWinners', JSON.stringify(updatedWinners));
     }
