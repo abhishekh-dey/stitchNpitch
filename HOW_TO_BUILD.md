@@ -1,6 +1,6 @@
 # How to Build the Stitch n Pitch Contest Application
 
-## 📋 Table of Contents
+## 📋 Table of Contents 
 
 1. [Project Overview](#project-overview)
 2. [Prerequisites](#prerequisites)
