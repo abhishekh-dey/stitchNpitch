@@ -9,6 +9,7 @@ import FailAnimation from './components/FailAnimation';
 import DynamicOrbs from './components/DynamicOrbs';
 import Navigation from './components/Navigation';
 import { Guide, Winner, ADMIN_PASSWORD } from './config/data';
+import { normalizeAllDepartments } from './utils/updateWinnerDepartment';
 
 type AppTab = 'selection' | 'winners';
 
@@ -26,6 +27,8 @@ function App() {
   // Load winners from Supabase on component mount
   useEffect(() => {
     loadWinners();
+    // Normalize department names on app start
+    normalizeAllDepartments();
   }, []);
 
   const loadWinners = async () => {
