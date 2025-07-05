@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trophy, Home, History, Trash2, X, AlertTriangle } from 'lucide-react';
+import { Trophy, Home, History, Trash2, X, AlertTriangle, BarChart3, Download, Database } from 'lucide-react';
 import { PURGE_PASSWORD } from '../config/data';
 
 interface NavigationProps {
@@ -7,6 +7,9 @@ interface NavigationProps {
   onTabChange: (tab: 'selection' | 'winners') => void;
   onPurgeWinners: () => void;
   winnerCount: number;
+  onOpenWinHistoryDashboard: () => void;
+  onOpenExportData: () => void;
+  onOpenBackupRestore: () => void;
 }
 
 interface PurgeModalProps {
@@ -106,7 +109,10 @@ const Navigation: React.FC<NavigationProps> = ({
   currentTab,
   onTabChange,
   onPurgeWinners,
-  winnerCount
+  winnerCount,
+  onOpenWinHistoryDashboard,
+  onOpenExportData,
+  onOpenBackupRestore
 }) => {
   const [isPurgeModalOpen, setIsPurgeModalOpen] = useState(false);
 
@@ -146,7 +152,7 @@ const Navigation: React.FC<NavigationProps> = ({
             </button>
 
             {/* Navigation Tabs */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 onClick={() => onTabChange('selection')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
@@ -175,6 +181,38 @@ const Navigation: React.FC<NavigationProps> = ({
                   </span>
                 )}
               </button>
+
+              {/* New Feature Buttons */}
+              {winnerCount > 0 && (
+                <>
+                  <button
+                    onClick={onOpenWinHistoryDashboard}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-blue-200 hover:text-white hover:bg-white hover:bg-opacity-10 transition-all"
+                    title="Win History Dashboard"
+                  >
+                    <BarChart3 className="w-4 h-4" />
+                    <span className="hidden sm:inline">Analytics</span>
+                  </button>
+
+                  <button
+                    onClick={onOpenExportData}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-blue-200 hover:text-white hover:bg-white hover:bg-opacity-10 transition-all"
+                    title="Export Data"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span className="hidden sm:inline">Export</span>
+                  </button>
+
+                  <button
+                    onClick={onOpenBackupRestore}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-blue-200 hover:text-white hover:bg-white hover:bg-opacity-10 transition-all"
+                    title="Backup & Restore"
+                  >
+                    <Database className="w-4 h-4" />
+                    <span className="hidden sm:inline">Backup</span>
+                  </button>
+                </>
+              )}
 
               {/* Purge Button - Only show in winners tab */}
               {currentTab === 'winners' && winnerCount > 0 && (

@@ -4,6 +4,9 @@ import RandomGuideSelector from './components/RandomGuideSelector';
 import PasswordModal from './components/PasswordModal';
 import WinnerDisplay from './components/WinnerDisplay';
 import WinnerHistory from './components/WinnerHistory';
+import WinHistoryDashboard from './components/WinHistoryDashboard';
+import ExportData from './components/ExportData';
+import BackupRestore from './components/BackupRestore';
 import ConfettiAnimation from './components/ConfettiAnimation';
 import FailAnimation from './components/FailAnimation';
 import DynamicOrbs from './components/DynamicOrbs';
@@ -22,6 +25,11 @@ function App() {
   const [showFailAnimation, setShowFailAnimation] = useState(false);
   const [failedGuideName, setFailedGuideName] = useState('');
   const [loading, setLoading] = useState(true);
+  
+  // New modal states
+  const [isWinHistoryDashboardOpen, setIsWinHistoryDashboardOpen] = useState(false);
+  const [isExportDataOpen, setIsExportDataOpen] = useState(false);
+  const [isBackupRestoreOpen, setIsBackupRestoreOpen] = useState(false);
 
   // Load winners from Supabase on component mount
   useEffect(() => {
@@ -164,6 +172,26 @@ function App() {
     }
   };
 
+  const handleRestoreWinners = async (restoredWinners: Winner[]) => {
+    try {
+      // First, purge existing data
+      await purgeAllWinners();
+      
+      // Then insert restored data
+      for (const winner of restoredWinners) {
+        await saveWinnerToDatabase(winner);
+      }
+      
+      // Reload to get fresh data
+      await loadWinners();
+    } catch (error) {
+      console.error('Error restoring winners:', error);
+      // Fallback to localStorage
+      setWinners(restoredWinners);
+      localStorage.setItem('stitchAndPitchWinners', JSON.stringify(restoredWinners));
+    }
+  };
+
   const handleGuideSelected = (guide: Guide) => {
     setSelectedGuide(guide);
     setIsPasswordModalOpen(true);
@@ -240,6 +268,9 @@ function App() {
         onTabChange={setCurrentTab}
         onPurgeWinners={purgeAllWinners}
         winnerCount={winners.length}
+        onOpenWinHistoryDashboard={() => setIsWinHistoryDashboardOpen(true)}
+        onOpenExportData={() => setIsExportDataOpen(true)}
+        onOpenBackupRestore={() => setIsBackupRestoreOpen(true)}
       />
 
       {/* Main Content */}
@@ -286,6 +317,26 @@ function App() {
           }
         }}
         guideName={selectedGuide?.name || ''}
+      />
+
+      {/* New Feature Modals */}
+      <WinHistoryDashboard
+        isOpen={isWinHistoryDashboardOpen}
+        onClose={() => setIsWinHistoryDashboardOpen(false)}
+        winners={winners}
+      />
+
+      <ExportData
+        isOpen={isExportDataOpen}
+        onClose={() => setIsExportDataOpen(false)}
+        winners={winners}
+      />
+
+      <BackupRestore
+        isOpen={isBackupRestoreOpen}
+        onClose={() => setIsBackupRestoreOpen(false)}
+        winners={winners}
+        onRestoreWinners={handleRestoreWinners}
       />
 
       {/* Confetti Animation */}
