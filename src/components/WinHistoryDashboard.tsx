@@ -110,33 +110,6 @@ const WinHistoryDashboard: React.FC<WinHistoryDashboardProps> = ({ isOpen, onClo
     onClose();
   };
 
-  // Custom label function for pie chart with better contrast
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, name, percentage }: any) => {
-    const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    // Only show label if percentage is significant enough
-    if (percentage < 5) return null;
-
-    return (
-      <text 
-        x={x} 
-        y={y} 
-        fill="#FFFFFF" 
-        textAnchor={x > cx ? 'start' : 'end'} 
-        dominantBaseline="central"
-        fontSize="12"
-        fontWeight="bold"
-        stroke="#000000"
-        strokeWidth="0.5"
-      >
-        {`${percentage.toFixed(1)}%`}
-      </text>
-    );
-  };
-
   return (
     <>
       <style>
@@ -383,7 +356,7 @@ const WinHistoryDashboard: React.FC<WinHistoryDashboardProps> = ({ isOpen, onClo
             {activeChart === 'pie' && (
               <div>
                 <h3 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6 text-center">Department Distribution</h3>
-                <div className="flex flex-col lg:flex-row items-center gap-4 md:gap-8">
+                <div className="flex flex-col lg:flex-row items-start gap-4 md:gap-8">
                   <div className="flex-1 w-full">
                     <ResponsiveContainer width="100%" height={300} className="mobile-pie-chart">
                       <PieChart>
@@ -396,7 +369,6 @@ const WinHistoryDashboard: React.FC<WinHistoryDashboardProps> = ({ isOpen, onClo
                           dataKey="wins"
                           animationDuration={1500}
                           labelLine={false}
-                          label={renderCustomizedLabel}
                         >
                           {departmentData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
@@ -415,6 +387,7 @@ const WinHistoryDashboard: React.FC<WinHistoryDashboardProps> = ({ isOpen, onClo
                     </ResponsiveContainer>
                   </div>
                   <div className="flex-1 w-full">
+                    <h4 className="text-lg font-semibold text-white mb-4">Department Breakdown</h4>
                     <div className="space-y-2 md:space-y-3 mobile-legend">
                       {departmentData.map((dept, index) => (
                         <div key={dept.name} className="flex items-center gap-2 md:gap-3 bg-white bg-opacity-5 rounded-lg p-2 md:p-3">
