@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Download, FileText, FileSpreadsheet, Calendar, Users, Trophy, X, CheckCircle } from 'lucide-react';
-import { Winner, GUIDES } from '../config/data';
+import { Download, FileText, FileSpreadsheet, Calendar, Users, Trophy, X, CheckCircle, Lock } from 'lucide-react';
+import { Winner, GUIDES, ADMIN_PASSWORD } from '../config/data';
 import jsPDF from 'jspdf';
 
 interface ExportDataProps {
@@ -15,6 +15,9 @@ const ExportData: React.FC<ExportDataProps> = ({ isOpen, onClose, winners }) => 
   const [selectedExport, setSelectedExport] = useState<ExportType>('winners-csv');
   const [isExporting, setIsExporting] = useState(false);
   const [exportSuccess, setExportSuccess] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   if (!isOpen) return null;
 
@@ -48,6 +51,28 @@ const ExportData: React.FC<ExportDataProps> = ({ isOpen, onClose, winners }) => 
       color: 'from-purple-500 to-indigo-600'
     }
   ];
+
+  const validatePassword = (inputPassword: string): boolean => {
+    return inputPassword === ADMIN_PASSWORD;
+  };
+
+  const handlePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validatePassword(password)) {
+      setShowPasswordModal(false);
+      setPassword('');
+      setPasswordError('');
+      performExport();
+    } else {
+      setPasswordError('Invalid password. Access denied.');
+    }
+  };
+
+  const handlePasswordModalClose = () => {
+    setShowPasswordModal(false);
+    setPassword('');
+    setPasswordError('');
+  };
 
   const generateCSV = (data: any[], filename: string) => {
     if (data.length === 0) {
@@ -168,7 +193,7 @@ const ExportData: React.FC<ExportDataProps> = ({ isOpen, onClose, winners }) => 
     pdf.save(`stitch-n-pitch-winners-report-${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
-  const handleExport = async () => {
+  const performExport = async () => {
     setIsExporting(true);
     
     try {
@@ -231,6 +256,10 @@ const ExportData: React.FC<ExportDataProps> = ({ isOpen, onClose, winners }) => 
     } finally {
       setIsExporting(false);
     }
+  };
+
+  const handleExport = () => {
+    setShowPasswordModal(true);
   };
 
   const handleModalClick = (e: React.MouseEvent) => {
@@ -402,6 +431,70 @@ const ExportData: React.FC<ExportDataProps> = ({ isOpen, onClose, winners }) => 
           </div>
         </div>
       </div>
+
+      {/* Password Modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm flex items-center justify-center z-60 p-4">
+          <div className="bg-white bg-opacity-10 backdrop-blur-xl border border-white border-opacity-20 rounded-3xl p-8 max-w-md w-full shadow-2xl">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-500 bg-opacity-20 rounded-xl backdrop-blur-sm">
+                  <Lock className="w-6 h-6 text-blue-300" />
+                </div>
+                <h2 className="text-2xl font-bold text-white">Admin Access Required</h2>
+              </div>
+              <button
+                onClick={handlePasswordModalClose}
+                className="text-white hover:text-gray-200 transition-colors bg-white bg-opacity-10 rounded-full p-2 hover:bg-opacity-20 backdrop-blur-sm"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-white text-opacity-90 mb-4">
+                Enter admin password to export data.
+              </p>
+              
+              <form onSubmit={handlePasswordSubmit}>
+                <label htmlFor="export-password" className="block text-sm font-medium text-white text-opacity-90 mb-2">
+                  Admin Password
+                </label>
+                <input
+                  type="password"
+                  id="export-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent text-white placeholder-white placeholder-opacity-60 backdrop-blur-sm"
+                  placeholder="Enter admin password"
+                />
+                
+                {passwordError && (
+                  <div className="mt-3 p-3 bg-red-500 bg-opacity-20 border border-red-400 border-opacity-50 text-red-200 rounded-lg backdrop-blur-sm">
+                    {passwordError}
+                  </div>
+                )}
+
+                <div className="flex gap-3 mt-6">
+                  <button
+                    type="button"
+                    onClick={handlePasswordModalClose}
+                    className="flex-1 py-3 px-4 bg-white bg-opacity-10 border border-white border-opacity-20 text-white rounded-xl hover:bg-opacity-20 transition-colors backdrop-blur-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 py-3 px-4 bg-blue-600 bg-opacity-80 text-white rounded-xl hover:bg-opacity-90 transition-colors backdrop-blur-sm border border-blue-500 border-opacity-50"
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
