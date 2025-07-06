@@ -267,6 +267,72 @@ const BackupRestore: React.FC<BackupRestoreProps> = ({
         `}
       </style>
 
+      {/* Password Modal - Higher z-index */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+          <div className="bg-white bg-opacity-10 backdrop-blur-xl border border-white border-opacity-20 rounded-3xl p-8 max-w-md w-full shadow-2xl">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-500 bg-opacity-20 rounded-xl backdrop-blur-sm">
+                  <Lock className="w-6 h-6 text-purple-300" />
+                </div>
+                <h2 className="text-2xl font-bold text-white">Admin Access Required</h2>
+              </div>
+              <button
+                onClick={handlePasswordModalClose}
+                className="text-white hover:text-gray-200 transition-colors bg-white bg-opacity-10 rounded-full p-2 hover:bg-opacity-20 backdrop-blur-sm"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-white text-opacity-90 mb-4">
+                Enter admin password to {pendingAction === 'backup' ? 'create backup' : 'restore data'}.
+              </p>
+              
+              <form onSubmit={handlePasswordSubmit}>
+                <label htmlFor="backup-password" className="block text-sm font-medium text-white text-opacity-90 mb-2">
+                  Admin Password
+                </label>
+                <input
+                  type="password"
+                  id="backup-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent text-white placeholder-white placeholder-opacity-60 backdrop-blur-sm"
+                  placeholder="Enter admin password"
+                  autoFocus
+                />
+                
+                {passwordError && (
+                  <div className="mt-3 p-3 bg-red-500 bg-opacity-20 border border-red-400 border-opacity-50 text-red-200 rounded-lg backdrop-blur-sm">
+                    {passwordError}
+                  </div>
+                )}
+
+                <div className="flex gap-3 mt-6">
+                  <button
+                    type="button"
+                    onClick={handlePasswordModalClose}
+                    className="flex-1 py-3 px-4 bg-white bg-opacity-10 border border-white border-opacity-20 text-white rounded-xl hover:bg-opacity-20 transition-colors backdrop-blur-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 py-3 px-4 bg-purple-600 bg-opacity-80 text-white rounded-xl hover:bg-opacity-90 transition-colors backdrop-blur-sm border border-purple-500 border-opacity-50"
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Backup Modal - Lower z-index */}
       <div 
         className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
         onClick={onClose}
@@ -545,70 +611,6 @@ const BackupRestore: React.FC<BackupRestoreProps> = ({
           )}
         </div>
       </div>
-
-      {/* Password Modal */}
-      {showPasswordModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm flex items-center justify-center z-60 p-4">
-          <div className="bg-white bg-opacity-10 backdrop-blur-xl border border-white border-opacity-20 rounded-3xl p-8 max-w-md w-full shadow-2xl">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-500 bg-opacity-20 rounded-xl backdrop-blur-sm">
-                  <Lock className="w-6 h-6 text-purple-300" />
-                </div>
-                <h2 className="text-2xl font-bold text-white">Admin Access Required</h2>
-              </div>
-              <button
-                onClick={handlePasswordModalClose}
-                className="text-white hover:text-gray-200 transition-colors bg-white bg-opacity-10 rounded-full p-2 hover:bg-opacity-20 backdrop-blur-sm"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            <div className="mb-6">
-              <p className="text-white text-opacity-90 mb-4">
-                Enter admin password to {pendingAction === 'backup' ? 'create backup' : 'restore data'}.
-              </p>
-              
-              <form onSubmit={handlePasswordSubmit}>
-                <label htmlFor="backup-password" className="block text-sm font-medium text-white text-opacity-90 mb-2">
-                  Admin Password
-                </label>
-                <input
-                  type="password"
-                  id="backup-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent text-white placeholder-white placeholder-opacity-60 backdrop-blur-sm"
-                  placeholder="Enter admin password"
-                />
-                
-                {passwordError && (
-                  <div className="mt-3 p-3 bg-red-500 bg-opacity-20 border border-red-400 border-opacity-50 text-red-200 rounded-lg backdrop-blur-sm">
-                    {passwordError}
-                  </div>
-                )}
-
-                <div className="flex gap-3 mt-6">
-                  <button
-                    type="button"
-                    onClick={handlePasswordModalClose}
-                    className="flex-1 py-3 px-4 bg-white bg-opacity-10 border border-white border-opacity-20 text-white rounded-xl hover:bg-opacity-20 transition-colors backdrop-blur-sm"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex-1 py-3 px-4 bg-purple-600 bg-opacity-80 text-white rounded-xl hover:bg-opacity-90 transition-colors backdrop-blur-sm border border-purple-500 border-opacity-50"
-                  >
-                    Confirm
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };
