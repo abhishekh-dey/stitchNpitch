@@ -17,15 +17,15 @@ const RandomGuideSelector: React.FC<RandomGuideSelectorProps> = ({
   const [isSpinning, setIsSpinning] = useState(false);
   const [currentSpinGuide, setCurrentSpinGuide] = useState<Guide | null>(null);
 
-  // Get winner IDs to exclude from selection
-  const winnerIds = new Set(winners.map(winner => winner.id || winner.guide_id));
+  // Get winner guide IDs to exclude from selection
+  const winnerGuideIds = new Set(winners.map(winner => winner.guide_id || winner.id));
 
   const selectRandomGuide = () => {
     if (!selectedDepartment) return;
     
     const departmentGuides = getGuidesByDepartment(selectedDepartment);
     // Filter out guides who are already winners
-    const availableGuides = departmentGuides.filter(guide => !winnerIds.has(guide.id));
+    const availableGuides = departmentGuides.filter(guide => !winnerGuideIds.has(guide.id));
     
     if (availableGuides.length === 0) {
       alert('No more guides available in this department! All guides have already been selected as winners.');
@@ -69,7 +69,7 @@ const RandomGuideSelector: React.FC<RandomGuideSelectorProps> = ({
   };
 
   const departmentGuides = selectedDepartment ? getGuidesByDepartment(selectedDepartment) : [];
-  const availableGuides = departmentGuides.filter(guide => !winnerIds.has(guide.id));
+  const availableGuides = departmentGuides.filter(guide => !winnerGuideIds.has(guide.id));
 
   return (
     <div className="pt-20 pb-8 px-4">

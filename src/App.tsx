@@ -78,7 +78,7 @@ function App() {
       const { data, error } = await supabase
         .from('winners')
         .insert([{
-          guide_id: winner.id,
+          guide_id: winner.id || winner.guide_id,
           name: winner.name,
           department: winner.department,
           supervisor: winner.supervisor,

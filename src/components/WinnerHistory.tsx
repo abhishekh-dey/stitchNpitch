@@ -400,7 +400,7 @@ const WinnerHistory: React.FC<WinnerHistoryProps> = ({ winners, onPurgeWinners, 
           <div className="grid gap-6">
             {filteredWinners.map((winner, index) => (
               <div
-                key={`${winner.id || winner.guide_id}-${winner.timestamp}`}
+                key={`${winner.id}-${winner.timestamp}`}
                 className="bg-white bg-opacity-10 backdrop-blur-md rounded-2xl p-6 shadow-xl transform transition-all hover:scale-105 border border-white border-opacity-20"
               >
                 <div className="flex items-start justify-between mb-4">
@@ -408,7 +408,7 @@ const WinnerHistory: React.FC<WinnerHistoryProps> = ({ winners, onPurgeWinners, 
                     <div className="w-12 h-12 bg-yellow-500 bg-opacity-30 rounded-full flex items-center justify-center backdrop-blur-sm">
                       <span className="text-yellow-200 font-bold text-lg">
                         #{selectedDepartment === 'All' 
-                          ? winners.findIndex(w => w.id === winner.id || w.guide_id === winner.guide_id) + 1
+                          ? winners.findIndex(w => w.id === winner.id) + 1
                           : index + 1
                         }
                       </span>

@@ -13,8 +13,8 @@ const DepartmentSelector: React.FC<DepartmentSelectorProps> = ({
   onDepartmentSelect,
   winners
 }) => {
-  // Get winner IDs to exclude from selection
-  const winnerIds = new Set(winners.map(winner => winner.id || winner.guide_id));
+  // Get winner guide IDs to exclude from selection
+  const winnerGuideIds = new Set(winners.map(winner => winner.guide_id || winner.id));
 
   return (
     <div className="mb-8">
@@ -29,7 +29,7 @@ const DepartmentSelector: React.FC<DepartmentSelectorProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
         {DEPARTMENTS.map((department) => {
           const allGuides = getGuidesByDepartment(department);
-          const availableGuides = allGuides.filter(guide => !winnerIds.has(guide.id));
+          const availableGuides = allGuides.filter(guide => !winnerGuideIds.has(guide.id));
           const winnersCount = allGuides.length - availableGuides.length;
           const isSelected = selectedDepartment === department;
           
